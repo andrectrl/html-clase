@@ -1,0 +1,140 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Calculadora de 3 Números</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Calculadora Promedio para operar 3 números: suma, promedio, producto, máximo y mínimo.">
+</head>
+<body>
+  <main class="container">
+    <header class="card header">
+      <h1>Calculadora de 3 Números</h1>
+      <p class="lead">Introduce tres valores y elige la operación.</p>
+    </header>
+
+    <section class="card form-card">
+      <form id="calcForm" onsubmit="event.preventDefault(); calculate();">
+        <div class="inputs">
+          <label>
+            Número 1
+            <input type="number" step="any" id="n1" required>
+          </label>
+          <label>
+            Número 2
+            <input type="number" step="any" id="n2" required>
+          </label>
+          <label>
+            Número 3
+            <input type="number" step="any" id="n3" required>
+          </label>
+        </div>
+
+        <div class="controls">
+          <label class="select">
+            Operación
+            <select id="operation">
+              <option value="sum">Suma</option>
+              <option value="avg">Promedio</option>
+              <option value="prod">Producto</option>
+              <option value="max">Máximo</option>
+              <option value="min">Mínimo</option>
+            </select>
+          </label>
+
+          <div class="buttons">
+            <button type="submit" class="btn primary">Calcular</button>
+            <button type="button" class="btn" onclick="resetForm()">Limpiar</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="card result-card" aria-live="polite">
+      <h2>Resultado</h2>
+      <div id="result" class="result">—</div>
+      <div id="detail" class="detail"></div>
+    </section>
+    
+    <section class="card lists-card">
+      <h2>Ejemplos de Listas</h2>
+      <div class="lists-grid">
+        <div>
+          <h3>Lista Desordenada</h3>
+          <ul>
+            <li>Manzana</li>
+            <li>Naranja</li>
+            <li>Plátano</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Lista Ordenada</h3>
+          <ol>
+            <li>Primero</li>
+            <li>Segundo</li>
+            <li>Tercero</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+    <footer class="card footer">
+      <small>Diseño limpio y responsive — Hecho con HTML5 y CSS3</small>
+    </footer>
+  </main>
+
+  <script>
+    function formatNumber(n){
+      if (!isFinite(n)) return 'No válido';
+      if (Number.isInteger(n)) return n.toString();
+      return Number(n).toFixed(6).replace(/\.0+$/,'').replace(/(\.[0-9]*?)0+$/,'$1');
+    }
+
+    function calculate(){
+      const v1 = parseFloat(document.getElementById('n1').value);
+      const v2 = parseFloat(document.getElementById('n2').value);
+      const v3 = parseFloat(document.getElementById('n3').value);
+      if ([v1,v2,v3].some(v => Number.isNaN(v))){
+        document.getElementById('result').textContent = 'Por favor ingresa tres números válidos.';
+        document.getElementById('detail').textContent = '';
+        return;
+      }
+      const op = document.getElementById('operation').value;
+      let res, detail;
+      switch(op){
+        case 'sum':
+          res = v1 + v2 + v3;
+          detail = `${v1} + ${v2} + ${v3}`;
+          break;
+        case 'avg':
+          res = (v1 + v2 + v3) / 3;
+          detail = `(${v1} + ${v2} + ${v3}) / 3`;
+          break;
+        case 'prod':
+          res = v1 * v2 * v3;
+          detail = `${v1} × ${v2} × ${v3}`;
+          break;
+        case 'max':
+          res = Math.max(v1,v2,v3);
+          detail = `Máximo entre ${v1}, ${v2}, ${v3}`;
+          break;
+        case 'min':
+          res = Math.min(v1,v2,v3);
+          detail = `Mínimo entre ${v1}, ${v2}, ${v3}`;
+          break;
+        default:
+          res = NaN;
+      }
+
+      document.getElementById('result').textContent = formatNumber(res);
+      document.getElementById('detail').textContent = detail || '';
+    }
+
+    function resetForm(){
+      document.getElementById('calcForm').reset();
+      document.getElementById('result').textContent = '—';
+      document.getElementById('detail').textContent = '';
+    }
+  </script>
+</body>
+</html>
